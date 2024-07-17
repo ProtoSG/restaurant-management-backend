@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	sharedDomain "restaurant-management-backend/cmd/shared/domain"
 	"restaurant-management-backend/cmd/shared/infrastructure"
 	"restaurant-management-backend/cmd/user/domain"
 	"strconv"
@@ -35,22 +34,22 @@ func (c *HttpUserController) Create(w http.ResponseWriter, r *http.Request) {
 
 	var req domain.UserPrimitive
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
+		infrastructure.RespondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 	defer r.Body.Close()
 
 	if err := req.Validate(); err != nil {
-		respondValidationError(w, err)
+		infrastructure.RespondValidationError(w, err)
 		return
 	}
 
 	if err := c.serviceContainer.User.Create.Execute(req.Id, req.Username, req.Password, req.Role); err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
+		infrastructure.RespondWithError(w, http.StatusBadRequest, "Error al crear el usuario")
 		return
 	}
 
-	respondWithSuccess(w, http.StatusCreated, nil)
+	infrastructure.RespondWithSuccess(w, http.StatusCreated, nil)
 }
 
 func (c *HttpUserController) GetAll(w http.ResponseWriter, r *http.Request) {
@@ -58,7 +57,7 @@ func (c *HttpUserController) GetAll(w http.ResponseWriter, r *http.Request) {
 
 	users, err := c.serviceContainer.User.GetAll.Execute()
 	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
+		infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al obtener todos los usuarios")
 		return
 	}
 
@@ -67,7 +66,7 @@ func (c *HttpUserController) GetAll(w http.ResponseWriter, r *http.Request) {
 		primitiveUsers[i] = user.MapToPrimitive()
 	}
 
-	respondWithSuccess(w, http.StatusOK, primitiveUsers)
+	infrastructure.RespondWithSuccess(w, http.StatusOK, primitiveUsers)
 }
 
 func (c *HttpUserController) GetById(w http.ResponseWriter, r *http.Request) {
@@ -76,7 +75,7 @@ func (c *HttpUserController) GetById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid user ID")
+		infrastructure.RespondWithError(w, http.StatusBadRequest, "Invalid user ID")
 		return
 	}
 
@@ -85,14 +84,14 @@ func (c *HttpUserController) GetById(w http.ResponseWriter, r *http.Request) {
 	user, erro := c.serviceContainer.User.GetById.Execute(id)
 	if erro != nil {
 		if _, ok := erro.(*domain.UserNotFoundError); ok {
-			respondWithError(w, http.StatusNotFound, erro.Error())
+			infrastructure.RespondWithError(w, http.StatusNotFound, erro.Error())
 		} else {
-			respondWithError(w, http.StatusInternalServerError, erro.Error())
+			infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al obtener el usuario")
 		}
 		return
 	}
 
-	respondWithSuccess(w, http.StatusOK, user.MapToPrimitive())
+	infrastructure.RespondWithSuccess(w, http.StatusOK, user.MapToPrimitive())
 }
 
 func (c *HttpUserController) Edit(w http.ResponseWriter, r *http.Request) {
@@ -101,28 +100,28 @@ func (c *HttpUserController) Edit(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid user ID")
+		infrastructure.RespondWithError(w, http.StatusBadRequest, "Invalid user ID")
 		return
 	}
 
 	var req domain.UserPrimitive
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
+		infrastructure.RespondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 	defer r.Body.Close()
 
 	if err := req.Validate(); err != nil {
-		respondValidationError(w, err)
+		infrastructure.RespondValidationError(w, err)
 		return
 	}
 
 	if err := c.serviceContainer.User.Edit.Execute(id, req.Username, req.Password, req.Role); err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
+		infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al editar el usuario")
 		return
 	}
 
-	respondWithSuccess(w, http.StatusOK, nil)
+	infrastructure.RespondWithSuccess(w, http.StatusOK, nil)
 }
 
 func (c *HttpUserController) Delete(w http.ResponseWriter, r *http.Request) {
@@ -131,35 +130,14 @@ func (c *HttpUserController) Delete(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid user ID")
+		infrastructure.RespondWithError(w, http.StatusBadRequest, "Invalid user ID")
 		return
 	}
 
 	if err := c.serviceContainer.User.Delete.Execute(id); err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
+		infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al eliminar el usuario")
 		return
 	}
 
-	respondWithSuccess(w, http.StatusOK, nil)
-}
-
-// Función auxiliar para manejar las respuestas de éxito
-func respondWithSuccess(w http.ResponseWriter, statusCode int, data interface{}) {
-	w.WriteHeader(statusCode)
-	if data != nil {
-		if err := json.NewEncoder(w).Encode(data); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-	}
-}
-
-func respondValidationError(w http.ResponseWriter, validationError *sharedDomain.ValidationFieldError) {
-	w.WriteHeader(http.StatusBadRequest)
-	json.NewEncoder(w).Encode(map[string]string{"field": validationError.Field, "message": validationError.Message})
-}
-
-// Función auxiliar para manejar las respuestas de error
-func respondWithError(w http.ResponseWriter, statusCode int, message string) {
-	w.WriteHeader(statusCode)
-	json.NewEncoder(w).Encode(map[string]string{"error": message})
+	infrastructure.RespondWithSuccess(w, http.StatusOK, nil)
 }

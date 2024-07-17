@@ -3,6 +3,7 @@ package infrastructure
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/tursodatabase/libsql-client-go/libsql"
 	"os"
 	"restaurant-management-backend/cmd/table/domain"
 	"restaurant-management-backend/cmd/table/domain/types"
@@ -75,7 +76,7 @@ func (this SQLiteTableRepository) GetAll() ([]*domain.Table, error) {
 	return tables, nil
 }
 
-func (this SQLiteTableRepository) GetById(tableId *types.TableId) (*domain.Table, error) {
+func (this SQLiteTableRepository) GetById(tableId *types.TableId) (*domain.TableResponse, error) {
 	stmt, err := this.db.Prepare("SELECT * FROM tables WHERE id = ?")
 	if err != nil {
 		return nil, err
@@ -87,9 +88,7 @@ func (this SQLiteTableRepository) GetById(tableId *types.TableId) (*domain.Table
 	var table domain.TablePrimitive
 
 	err = row.Scan(&table.Id, &table.Name, &table.CategoryId, &table.Status)
-	if err == sql.ErrNoRows {
-		return nil, nil
-	} else if err != nil {
+	if err != nil {
 		return nil, err
 	}
 
@@ -97,7 +96,9 @@ func (this SQLiteTableRepository) GetById(tableId *types.TableId) (*domain.Table
 	tableCategoryId, _ := types.NewTableCategoryId(table.CategoryId)
 	tableStatus, _ := types.NewTableStatus(table.Status)
 
-	newTable := domain.NewTable(tableId, tableName, tableCategoryId, tableStatus)
+	newCategory := types.NewTableCategory(tableCategoryId.Value, table.Name)
+
+	newTable := domain.NewTableResponse(tableId, tableName, newCategory, tableStatus)
 
 	return newTable, nil
 }

@@ -92,9 +92,7 @@ func (r *sqliteUserRepository) GetById(userId *types.UserId) (*domain.User, erro
 	var user domain.UserPrimitive
 
 	err = row.Scan(&user.Id, &user.Username, &user.Password, &user.Role)
-	if err == sql.ErrNoRows {
-		return nil, nil
-	} else if err != nil {
+	if err != nil {
 		return nil, err
 	}
 

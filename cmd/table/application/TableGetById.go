@@ -14,7 +14,7 @@ func NewTableGetById(repository repository.TableRepository) *TableGetById {
 	return &TableGetById{repository: repository}
 }
 
-func (this TableGetById) Execute(id int) (*domain.Table, error) {
+func (this TableGetById) Execute(id int) (*domain.TableResponse, error) {
 	tableId, err := types.NewTableId(id)
 	if err != nil {
 		return nil, err

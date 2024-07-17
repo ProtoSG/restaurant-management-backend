@@ -17,3 +17,19 @@ func NewTable(id *types.TableId, name *types.TableName, category_id *types.Table
 		Status:    status,
 	}
 }
+
+type TableResponse struct {
+	Id      *types.TableId       `json:"id"`
+	Name    *types.TableName     `json:"name"`
+	Categoy *types.TableCategory `json:"category"`
+	Status  *types.TableStatus   `json:"status"`
+}
+
+func NewTableResponse(id *types.TableId, name *types.TableName, category *types.TableCategory, status *types.TableStatus) *TableResponse {
+	return &TableResponse{
+		Id:      id,
+		Name:    name,
+		Categoy: category,
+		Status:  status,
+	}
+}

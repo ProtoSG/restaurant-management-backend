@@ -1,4 +1,4 @@
-http://localhost:8080/users
+http://localhost:8080/tables
 
 --include 
 --silent
@@ -15,9 +15,9 @@ GET /3
 #POST 
 #{
 #  #"id" : 1,
-#  "username" : "test",
-#  "password" : "test"
-#  #"role" : "ADMIN"
+#  "name" : "test",
+#  "category_id" : 1,
+#  "status" : 1
 #}
 
 #PUT /2
