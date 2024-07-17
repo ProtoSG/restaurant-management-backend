@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	sharedDomain "restaurant-management-backend/cmd/shared/domain"
 	"restaurant-management-backend/cmd/shared/infrastructure"
 	"restaurant-management-backend/cmd/user/domain"
 	"strconv"
@@ -152,7 +153,7 @@ func respondWithSuccess(w http.ResponseWriter, statusCode int, data interface{})
 	}
 }
 
-func respondValidationError(w http.ResponseWriter, validationError *domain.UserValidationError) {
+func respondValidationError(w http.ResponseWriter, validationError *sharedDomain.ValidationFieldError) {
 	w.WriteHeader(http.StatusBadRequest)
 	json.NewEncoder(w).Encode(map[string]string{"field": validationError.Field, "message": validationError.Message})
 }

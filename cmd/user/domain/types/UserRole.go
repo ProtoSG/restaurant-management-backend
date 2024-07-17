@@ -8,10 +8,10 @@ type UserRole struct {
 
 func NewUserRole(value string) (*UserRole, error) {
 	userRole := UserRole{Value: value}
-	// err := userRole.ensureIsValid()
-	// if err != nil {
-	// 	return nil, err
-	// }
+	err := userRole.ensureIsValid()
+	if err != nil {
+		return nil, err
+	}
 	return &userRole, nil
 }
 

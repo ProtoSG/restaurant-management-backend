@@ -13,8 +13,8 @@ func NewInMemoryUserRepository() *InMemoryUserRepository {
 	return &InMemoryUserRepository{users: []*domain.User{}}
 }
 
-func (this *InMemoryUserRepository) Create(note *domain.User) error {
-	this.users = append(this.users, note)
+func (this *InMemoryUserRepository) Create(user *domain.User) error {
+	this.users = append(this.users, user)
 	return nil
 }
 

@@ -27,7 +27,7 @@ func NewSQLiteUserRepository(url string) *sqliteUserRepository {
 }
 
 func (r *sqliteUserRepository) Create(user *domain.User) error {
-	stmt, err := r.db.Prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)")
+	stmt, err := r.db.Prepare("INSERT INTO user (username, password, role) VALUES (?, ?, ?)")
 	if err != nil {
 		return err
 	}
@@ -41,8 +41,8 @@ func (r *sqliteUserRepository) Create(user *domain.User) error {
 	return nil
 }
 
-func (r *sqliteUserRepository) GetAll() ([]*domain.User, error) {
-	stmt, err := r.db.Prepare("SELECT * FROM user")
+func (this *sqliteUserRepository) GetAll() ([]*domain.User, error) {
+	stmt, err := this.db.Prepare("SELECT * FROM user")
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +60,6 @@ func (r *sqliteUserRepository) GetAll() ([]*domain.User, error) {
 		var user domain.UserPrimitive
 
 		if err := rows.Scan(&user.Id, &user.Username, &user.Password, &user.Role); err != nil {
-			fmt.Println("Error scanning row:", err)
 			return nil, err
 		}
 
@@ -72,10 +71,7 @@ func (r *sqliteUserRepository) GetAll() ([]*domain.User, error) {
 		newUser := domain.NewUser(userId, userUsername, userPassword, userRole)
 
 		users = append(users, newUser)
-		fmt.Println(user.Id, user.Username)
 	}
-
-	fmt.Println(users)
 
 	if err := rows.Err(); err != nil {
 		fmt.Println("Error during rows iteration:", err)
@@ -85,7 +81,7 @@ func (r *sqliteUserRepository) GetAll() ([]*domain.User, error) {
 }
 
 func (r *sqliteUserRepository) GetById(userId *types.UserId) (*domain.User, error) {
-	stmt, err := r.db.Prepare("SELECT id, username, password, role FROM users WHERE id = ?")
+	stmt, err := r.db.Prepare("SELECT * FROM user WHERE id = ?")
 	if err != nil {
 		return nil, err
 	}
@@ -93,29 +89,26 @@ func (r *sqliteUserRepository) GetById(userId *types.UserId) (*domain.User, erro
 
 	row := stmt.QueryRow(userId.Value)
 
-	var id int
-	var username string
-	var password string
-	var role string
+	var user domain.UserPrimitive
 
-	err = row.Scan(&id, &username, &password, &role)
+	err = row.Scan(&user.Id, &user.Username, &user.Password, &user.Role)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	} else if err != nil {
 		return nil, err
 	}
 
-	userUsername, _ := types.NewUserUsername(username)
-	userPassword, _ := types.NewUserPassword(password)
-	userRole, _ := types.NewUserRole(role)
+	userUsername, _ := types.NewUserUsername(user.Username)
+	userPassword, _ := types.NewUserPassword(user.Password)
+	userRole, _ := types.NewUserRole(user.Role)
 
-	user := domain.NewUser(userId, userUsername, userPassword, userRole)
+	newUser := domain.NewUser(userId, userUsername, userPassword, userRole)
 
-	return user, nil
+	return newUser, nil
 }
 
 func (r *sqliteUserRepository) Edit(user *domain.User) error {
-	stmt, err := r.db.Prepare("UPDATE users SET username = ?, password = ?, role = ? WHERE id = ?")
+	stmt, err := r.db.Prepare("UPDATE user SET username = ?, password = ?, role = ? WHERE id = ?")
 	if err != nil {
 		return err
 	}
@@ -130,7 +123,7 @@ func (r *sqliteUserRepository) Edit(user *domain.User) error {
 }
 
 func (r *sqliteUserRepository) Delete(id *types.UserId) error {
-	stmt, err := r.db.Prepare("DELETE FROM users WHERE id = ?")
+	stmt, err := r.db.Prepare("DELETE FROM user WHERE id = ?")
 	if err != nil {
 		return err
 	}
