@@ -8,6 +8,9 @@ type UserUsername struct {
 
 func NewUserUsername(value string) (*UserUsername, error) {
 	userUsername := UserUsername{Value: value}
+	// if err := userUsername.ensureIsValid(); err != nil {
+	// 	return nil, err
+	// }
 	return &userUsername, nil
 }
 
