@@ -1,7 +1,6 @@
 package application
 
 import (
-	"log"
 	"restaurant-management-backend/cmd/user/domain"
 	"restaurant-management-backend/cmd/user/domain/repository"
 	"restaurant-management-backend/cmd/user/domain/types"
@@ -23,7 +22,6 @@ func (this *UserGetById) Execute(id int) (*domain.User, error) {
 
 	user, erro := this.repository.GetById(userId)
 	if erro != nil {
-		log.Println("Error", erro)
 		return nil, domain.NewUserNotFoundError(*userId)
 	}
 

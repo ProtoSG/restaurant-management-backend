@@ -20,6 +20,10 @@ func (this TableEdit) Execute(id int, name string, category_id int, status int) 
 		return err
 	}
 
+	if table, _ := this.repository.GetById(tableId); table == nil {
+		return domain.NewTableNotFound(*tableId)
+	}
+
 	tableName, err := types.NewTableName(name)
 	if err != nil {
 		return err

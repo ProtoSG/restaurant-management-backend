@@ -7,7 +7,7 @@ import (
 
 type TableRepository interface {
 	Create(table *domain.Table) error
-	GetAll() ([]*domain.Table, error)
+	GetAll() ([]*domain.TableResponse, error)
 	GetById(id *types.TableId) (*domain.TableResponse, error)
 	Edit(table *domain.Table) error
 	Delete(id *types.TableId) error

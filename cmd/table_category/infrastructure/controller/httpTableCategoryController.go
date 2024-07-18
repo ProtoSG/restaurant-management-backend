@@ -104,7 +104,11 @@ func (this *HttpTableCategoryController) Edit(w http.ResponseWriter, r *http.Req
 	}
 
 	if err := this.serviceContainer.TableCategory.Edit.Execute(id, tableCategory.Name); err != nil {
-		infrastructure.RespondWithError(w, http.StatusBadRequest, "Error al editar la categoría de tabla")
+		if _, ok := err.(*domain.TableCategoryNotFound); ok {
+			infrastructure.RespondWithError(w, http.StatusNotFound, err.Error())
+		} else {
+			infrastructure.RespondWithError(w, http.StatusBadRequest, "Error al editar la categoría de tabla")
+		}
 		return
 	}
 
@@ -122,7 +126,11 @@ func (this *HttpTableCategoryController) Delete(w http.ResponseWriter, r *http.R
 	}
 
 	if err := this.serviceContainer.TableCategory.Delete.Execute(id); err != nil {
-		infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al eliminar la categoría de tabla")
+		if _, ok := err.(*domain.TableCategoryNotFound); ok {
+			infrastructure.RespondWithError(w, http.StatusNotFound, err.Error())
+		} else {
+			infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al eliminar la categoría de tabla")
+		}
 		return
 	}
 

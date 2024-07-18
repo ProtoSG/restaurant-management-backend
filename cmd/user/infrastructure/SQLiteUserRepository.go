@@ -3,7 +3,6 @@ package infrastructure
 import (
 	"database/sql"
 	"fmt"
-	"os"
 	"restaurant-management-backend/cmd/user/domain"
 	"restaurant-management-backend/cmd/user/domain/types"
 
@@ -14,13 +13,7 @@ type sqliteUserRepository struct {
 	db *sql.DB
 }
 
-func NewSQLiteUserRepository(url string) *sqliteUserRepository {
-	db, err := sql.Open("libsql", url)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to open db %s: %s", url, err)
-		os.Exit(1)
-	}
-
+func NewSQLiteUserRepository(db *sql.DB) *sqliteUserRepository {
 	return &sqliteUserRepository{
 		db: db,
 	}

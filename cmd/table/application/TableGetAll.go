@@ -13,6 +13,6 @@ func NewTableGetAll(repository repository.TableRepository) *TableGetAll {
 	return &TableGetAll{repository: repository}
 }
 
-func (this TableGetAll) Execute() ([]*domain.Table, error) {
+func (this TableGetAll) Execute() ([]*domain.TableResponse, error) {
 	return this.repository.GetAll()
 }

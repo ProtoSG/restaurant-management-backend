@@ -2,7 +2,6 @@ package controller
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"restaurant-management-backend/cmd/shared/infrastructure"
 	"restaurant-management-backend/cmd/user/domain"
@@ -13,13 +12,6 @@ import (
 
 type HttpUserController struct {
 	serviceContainer *infrastructure.ServiceContainer
-}
-
-type req struct {
-	Id       int    `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Role     string `json:"role"`
 }
 
 // Inicializar el Controlador
@@ -79,8 +71,6 @@ func (c *HttpUserController) GetById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println(id)
-
 	user, erro := c.serviceContainer.User.GetById.Execute(id)
 	if erro != nil {
 		if _, ok := erro.(*domain.UserNotFoundError); ok {
@@ -117,7 +107,11 @@ func (c *HttpUserController) Edit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := c.serviceContainer.User.Edit.Execute(id, req.Username, req.Password, req.Role); err != nil {
-		infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al editar el usuario")
+		if _, ok := err.(*domain.UserNotFoundError); ok {
+			infrastructure.RespondWithError(w, http.StatusNotFound, err.Error())
+		} else {
+			infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al editar el usuario")
+		}
 		return
 	}
 
@@ -135,7 +129,11 @@ func (c *HttpUserController) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := c.serviceContainer.User.Delete.Execute(id); err != nil {
-		infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al eliminar el usuario")
+		if _, ok := err.(*domain.UserNotFoundError); ok {
+			infrastructure.RespondWithError(w, http.StatusNotFound, err.Error())
+		} else {
+			infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al eliminar el usuario")
+		}
 		return
 	}
 

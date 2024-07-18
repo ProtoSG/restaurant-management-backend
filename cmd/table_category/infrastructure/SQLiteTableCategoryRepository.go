@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
-	"os"
 	"restaurant-management-backend/cmd/table_category/domain"
 	"restaurant-management-backend/cmd/table_category/domain/types"
 )
@@ -13,12 +12,8 @@ type SQLiteTableCategoryRepository struct {
 	db *sql.DB
 }
 
-func NewSQLiteTableCategoryRepository(url string) *SQLiteTableCategoryRepository {
-	db, err := sql.Open("libsql", url)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to open db %s: %s", url, err)
-		os.Exit(1)
-	}
+func NewSQLiteTableCategoryRepository(db *sql.DB) *SQLiteTableCategoryRepository {
+
 	return &SQLiteTableCategoryRepository{db: db}
 }
 

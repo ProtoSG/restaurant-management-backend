@@ -22,6 +22,10 @@ func (this TableCategoryEdit) Execute(id int, name string) error {
 		return err
 	}
 
+	if tableCategory, _ := this.repository.GetById(tableCategoryId); tableCategory == nil {
+		return domain.NewTableCategoryNotFound(*tableCategoryId)
+	}
+
 	tableCategoryName, err := types.NewTableCategoryName(name)
 	if err != nil {
 		return err

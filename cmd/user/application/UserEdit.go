@@ -20,6 +20,10 @@ func (this *UserEdit) Execute(id int, username string, password string, role str
 		return err
 	}
 
+	if user, _ := this.repository.GetById(userId); user == nil {
+		return domain.NewUserNotFoundError(*userId)
+	}
+
 	userUsername, err := types.NewUserUsername(username)
 	if err != nil {
 		return err

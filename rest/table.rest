@@ -8,9 +8,9 @@ Connection: keep-alive
 Content-Type: application/json; charset=utf-8 
 User-Agent: VRC
 
-#GET 
+GET 
 
-GET /3
+#GET /3
 
 #POST 
 #{
@@ -20,12 +20,12 @@ GET /3
 #  "status" : 1
 #}
 
-#PUT /2
+#PUT /1
 #{
-#"username" : "Pedro",
-#  "password" : "asd",
-#  "role" : "ADMIN"
+#  "name" : "Mesa 02",
+#  "category_id" : 2,
+#  "status" : 1
 #}
 
 
-#DELETE /1
+#DELETE /2

@@ -46,11 +46,11 @@ func (this *HttpTableController) GetAll(w http.ResponseWriter, r *http.Request) 
 
 	tables, err := this.serviceContainer.Table.GetAll.Execute()
 	if err != nil {
-		infrastructure.RespondWithError(w, http.StatusInternalServerError, err.Error())
+		infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al obtener las tablas")
 		return
 	}
 
-	primitiveTables := make([]*domain.TablePrimitive, len(tables))
+	primitiveTables := make([]*domain.TableResponsePrimitive, len(tables))
 	for i, table := range tables {
 		primitiveTables[i] = table.MapToPrimitive()
 	}
@@ -78,7 +78,7 @@ func (this *HttpTableController) GetById(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	infrastructure.RespondWithSuccess(w, http.StatusOK, table)
+	infrastructure.RespondWithSuccess(w, http.StatusOK, table.MapToPrimitive())
 }
 
 func (this *HttpTableController) Edit(w http.ResponseWriter, r *http.Request) {
@@ -104,7 +104,11 @@ func (this *HttpTableController) Edit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := this.serviceContainer.Table.Edit.Execute(id, table.Name, table.CategoryId, table.Status); err != nil {
-		infrastructure.RespondWithError(w, http.StatusBadRequest, "Error al editar la tabla")
+		if _, ok := err.(*domain.TableNotFound); ok {
+			infrastructure.RespondWithError(w, http.StatusNotFound, err.Error())
+		} else {
+			infrastructure.RespondWithError(w, http.StatusBadRequest, err.Error())
+		}
 		return
 	}
 
@@ -122,7 +126,11 @@ func (this *HttpTableController) Delete(w http.ResponseWriter, r *http.Request) 
 	}
 
 	if err := this.serviceContainer.Table.Delete.Execute(id); err != nil {
-		infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al eliminar la tabla")
+		if _, ok := err.(*domain.TableNotFound); ok {
+			infrastructure.RespondWithError(w, http.StatusNotFound, err.Error())
+		} else {
+			infrastructure.RespondWithError(w, http.StatusInternalServerError, err.Error())
+		}
 		return
 	}
 

@@ -1,6 +1,7 @@
 package application
 
 import (
+	"restaurant-management-backend/cmd/table_category/domain"
 	"restaurant-management-backend/cmd/table_category/domain/repository"
 	"restaurant-management-backend/cmd/table_category/domain/types"
 )
@@ -20,5 +21,10 @@ func (this TableCategoryDelete) Execute(id int) error {
 	if err != nil {
 		return err
 	}
+
+	if tableCategory, _ := this.repository.GetById(tableCategoryId); tableCategory == nil {
+		return domain.NewTableCategoryNotFound(*tableCategoryId)
+	}
+
 	return this.repository.Delete(tableCategoryId)
 }
