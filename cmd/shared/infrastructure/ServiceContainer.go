@@ -13,6 +13,7 @@ type ServiceContainer struct {
 	Table         TableService
 	ItemCategory  ItemCategoryService
 	Inventory     InventoryService
+	Order         OrderService
 }
 
 func NewServiceContainer() *ServiceContainer {
@@ -29,6 +30,7 @@ func NewServiceContainer() *ServiceContainer {
 	container.Table = NewTableService(db)
 	container.ItemCategory = NewItemCategoryService(db)
 	container.Inventory = NewInventoryService(db)
+	container.Order = NewOrderService(db)
 
 	return container
 }

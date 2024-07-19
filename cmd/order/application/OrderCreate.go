@@ -4,6 +4,8 @@ import (
 	"restaurant-management-backend/cmd/order/domain"
 	"restaurant-management-backend/cmd/order/domain/repository"
 	"restaurant-management-backend/cmd/order/domain/types"
+	typesTable "restaurant-management-backend/cmd/table/domain/types"
+	typesUser "restaurant-management-backend/cmd/user/domain/types"
 	"time"
 )
 
@@ -23,12 +25,12 @@ func (this *OrderCreate) Execute(id int, tableId int, userId int, total float32,
 		return err
 	}
 
-	orderTableId, erro := types.NewOrderTableId(tableId)
+	orderTableId, erro := typesTable.NewTableId(tableId)
 	if erro != nil {
 		return erro
 	}
 
-	orderUserId, err := types.NewOrderUserId(userId)
+	orderUserId, err := typesUser.NewUserId(userId)
 	if err != nil {
 		return err
 	}

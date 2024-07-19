@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"database/sql"
 	"restaurant-management-backend/cmd/inventory/application"
 	"restaurant-management-backend/cmd/inventory/infrastructure"
 )

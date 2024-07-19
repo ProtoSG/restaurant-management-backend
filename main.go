@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	itemCategory "restaurant-management-backend/cmd/item_category/infrastructure/router"
+	orderRouter "restaurant-management-backend/cmd/order/infrastructure/router"
 	"restaurant-management-backend/cmd/shared/infrastructure"
 	tableRouter "restaurant-management-backend/cmd/table/infrastructure/router"
 	tableCategoryRouter "restaurant-management-backend/cmd/table_category/infrastructure/router"
@@ -21,6 +22,7 @@ func main() {
 	tableCategoryRouter.MuxTableCategoryRouter(r, serviceContainer)
 	tableRouter.MuxTableRouter(r, serviceContainer)
 	itemCategory.MuxItemCategoryRouter(r, serviceContainer)
+	orderRouter.MuxOrderRouter(r, serviceContainer)
 
 	log.Println("Server running on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", r))

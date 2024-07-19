@@ -7,9 +7,7 @@ import (
 	"time"
 
 	typesTable "restaurant-management-backend/cmd/table/domain/types"
-
-	domainTable "restaurant-management-backend/cmd/table/domain"
-	repositoryTable "restaurant-management-backend/cmd/table/domain/repository"
+	typesUser "restaurant-management-backend/cmd/user/domain/types"
 )
 
 type OrderEdit struct {
@@ -37,7 +35,26 @@ func (this *OrderEdit) Execute(id int, tableId int, userId int, total float32, c
 		return err
 	}
 
-	if table, _ := repositoryTable.TableRepository.GetById(this.repository, orderTableId); table == nil {
-		return domainTable.NewTableNotFound(*orderTableId)
+	orderUserId, err := typesUser.NewUserId(userId)
+	if err != nil {
+		return err
 	}
+
+	orderTotal, err := types.NewOrderTotal(total)
+	if err != nil {
+		return err
+	}
+
+	orderCreatedAt, err := types.NewOrderCreatedAt(createdAt)
+	if err != nil {
+		return err
+	}
+
+	orderUpdatedAt, err := types.NewOrderUpdatedAt(updatedAt)
+	if err != nil {
+		return err
+	}
+
+	order := domain.NewOrder(orderId, orderTableId, orderUserId, orderTotal, orderCreatedAt, orderUpdatedAt)
+	return this.repository.Edit(order)
 }
