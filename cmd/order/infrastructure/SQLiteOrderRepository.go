@@ -6,6 +6,8 @@ import (
 	"restaurant-management-backend/cmd/order/domain"
 	"restaurant-management-backend/cmd/order/domain/types"
 
+	domainOrderItem "restaurant-management-backend/cmd/order_item/domain"
+
 	domainUser "restaurant-management-backend/cmd/user/domain"
 	typesUser "restaurant-management-backend/cmd/user/domain/types"
 
@@ -57,6 +59,7 @@ func (this SQLiteOrderRepository) GetAll() ([]*domain.OrderResponse, error) {
 		var order domain.OrderPrimitive
 		var table *domainTable.TableResponse
 		var user *domainUser.User
+		var orderItems []*domainOrderItem.OrderItemResponse
 
 		if err := rows.Scan(&order.Id, &order.TableId, &order.UserId, &order.Total, &order.CreatedAt, &order.UpdatedAt); err != nil {
 			return nil, err
@@ -69,7 +72,7 @@ func (this SQLiteOrderRepository) GetAll() ([]*domain.OrderResponse, error) {
 		orderCreatedAt, _ := types.NewOrderCreatedAt(order.CreatedAt)
 		orderUpdatedAt, _ := types.NewOrderUpdatedAt(order.UpdatedAt)
 
-		newOrder := domain.NewOrderResponse(orderId, orderTableId, table, orderUserId, user, orderTotal, orderCreatedAt, orderUpdatedAt)
+		newOrder := domain.NewOrderResponse(orderId, orderTableId, table, orderUserId, user, orderItems, orderTotal, orderCreatedAt, orderUpdatedAt)
 
 		orders = append(orders, newOrder)
 	}
@@ -93,6 +96,7 @@ func (this SQLiteOrderRepository) GetById(orderId *types.OrderId) (*domain.Order
 	var order domain.OrderPrimitive
 	var user *domainUser.User
 	var table *domainTable.TableResponse
+	var orderItems []*domainOrderItem.OrderItemResponse
 
 	err = row.Scan(&order.Id, &order.TableId, &order.UserId, &order.Total, &order.CreatedAt, &order.UpdatedAt)
 	if err != nil {
@@ -105,7 +109,7 @@ func (this SQLiteOrderRepository) GetById(orderId *types.OrderId) (*domain.Order
 	orderCreatedAt, _ := types.NewOrderCreatedAt(order.CreatedAt)
 	orderUpdatedAt, _ := types.NewOrderUpdatedAt(order.UpdatedAt)
 
-	newOrder := domain.NewOrderResponse(orderId, orderTableId, table, orderUserId, user, orderTotal, orderCreatedAt, orderUpdatedAt)
+	newOrder := domain.NewOrderResponse(orderId, orderTableId, table, orderUserId, user, orderItems, orderTotal, orderCreatedAt, orderUpdatedAt)
 
 	return newOrder, nil
 }

@@ -1,4 +1,4 @@
-http://localhost:8080/order
+http://localhost:8080/inventory
 
 --include 
 --silent
@@ -20,12 +20,13 @@ GET
 #  "status" : 1
 #}
 
-#PUT /1
+#PUT /2
 #{
-#  "name" : "Mesa 02",
-#  "category_id" : 2,
-#  "status" : 1
+#"username" : "Pedro",
+#  "password" : "asd",
+#  "role" : "ADMIN"
 #}
 
 
-#DELETE /2
+#DELETE /1
+

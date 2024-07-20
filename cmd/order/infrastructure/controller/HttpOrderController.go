@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"net/http"
+	domainInventory "restaurant-management-backend/cmd/inventory/domain"
 	"restaurant-management-backend/cmd/order/domain"
 	"restaurant-management-backend/cmd/shared/infrastructure"
 	domainTable "restaurant-management-backend/cmd/table/domain"
@@ -52,7 +53,7 @@ func (this *HttpOrderController) GetAll(w http.ResponseWriter, r *http.Request) 
 
 	orders, err := this.serviceContainer.Order.GetAll.Execute()
 	if err != nil {
-		infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al obtener las ordenes")
+		infrastructure.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -78,8 +79,29 @@ func (this *HttpOrderController) GetAll(w http.ResponseWriter, r *http.Request) 
 			return
 		}
 
+		order_items, err := this.serviceContainer.OrderItem.GetByOrder.Execute(order.Id.Value)
+		if err != nil {
+			infrastructure.RespondWithError(w, http.StatusNotFound, err.Error())
+			return
+		}
+
+		for _, order_item := range order_items {
+			item, err := this.serviceContainer.Inventory.GetById.Execute(order_item.ItemId.Value)
+			if err != nil {
+				if _, ok := err.(*domainInventory.InventoryNotFound); ok {
+					infrastructure.RespondWithError(w, http.StatusNotFound, err.Error())
+				} else {
+					infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al obtener el Item")
+				}
+				return
+			}
+
+			order_item.Item = item
+		}
+
 		order.Table = table
 		order.User = user
+		order.OrderItems = order_items
 
 		primitiveResponseOrders[i] = order.MapToPrimitive()
 	}

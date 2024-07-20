@@ -81,7 +81,7 @@ func (this SQLiteInventoryRepository) GetById(id *types.InventoryId) (*domain.In
 	stmt, err := this.db.Prepare(`
     SELECT i.id, i.name, i.item_category_id AS category_name, i.quantity, i.price, ic.name AS category_name
     FROM inventory i 
-    JOIN item_category ic ON i.item_category_id = ic.item_category_id
+    JOIN item_category ic ON i.item_category_id = ic.id
     WHERE i.id = ?;
   `)
 	if err != nil {

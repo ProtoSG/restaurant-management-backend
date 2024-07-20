@@ -14,6 +14,7 @@ type ServiceContainer struct {
 	ItemCategory  ItemCategoryService
 	Inventory     InventoryService
 	Order         OrderService
+	OrderItem     OrderItemService
 }
 
 func NewServiceContainer() *ServiceContainer {
@@ -31,6 +32,7 @@ func NewServiceContainer() *ServiceContainer {
 	container.ItemCategory = NewItemCategoryService(db)
 	container.Inventory = NewInventoryService(db)
 	container.Order = NewOrderService(db)
+	container.OrderItem = NewOrderItemService(db)
 
 	return container
 }

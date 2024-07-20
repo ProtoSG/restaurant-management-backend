@@ -8,10 +8,13 @@ Connection: keep-alive
 Content-Type: application/json; charset=utf-8 
 User-Agent: VRC
 
+#NOTE: Probado
 #GET 
 
-#GET /3
+#NOTE: Probado
+#GET /2
 
+#NOTE: Probado
 #POST 
 #{
 #  #"id" : 1,

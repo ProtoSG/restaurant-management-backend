@@ -1,0 +1,39 @@
+http://localhost:8080/order_item
+
+--include 
+--silent
+
+Accept: application/json; 
+Connection: keep-alive 
+Content-Type: application/json; charset=utf-8 
+User-Agent: VRC
+
+
+# NOTE: Probado
+GET 
+
+# NOTE: Probado
+#GET /1
+
+# NOTE: Probado
+#POST 
+#{
+#  "order_id" : 1,
+#  "item_id" : 1,
+#  "quantity" : 1,
+#  "sub_total" : 18
+#}
+
+# NOTE: Probado
+#PUT /2
+#{
+#  "order_id" : 1,
+#  "item_id" : 1,
+#  "quantity" : 1,
+#  "sub_total" : 18
+#}
+
+
+# NOTE: Probado
+#DELETE /2
+

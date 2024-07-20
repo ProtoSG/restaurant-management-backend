@@ -8,6 +8,9 @@ type OrderTotal struct {
 
 func NewOrderTotal(value float32) (*OrderTotal, error) {
 	orderTotal := OrderTotal{Value: value}
+	if err := orderTotal.ensureIsValid(); err != nil {
+		return nil, err
+	}
 	return &orderTotal, nil
 }
 
