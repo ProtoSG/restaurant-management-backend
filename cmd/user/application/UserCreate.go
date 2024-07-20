@@ -1,7 +1,6 @@
 package application
 
 import (
-	"fmt"
 	"restaurant-management-backend/cmd/user/domain"
 	"restaurant-management-backend/cmd/user/domain/repository"
 	"restaurant-management-backend/cmd/user/domain/types"
@@ -16,8 +15,6 @@ func NewUserCreate(repository repository.UserRepository) *UserCreate {
 }
 
 func (this *UserCreate) Execute(id int, username string, password string, role string) error {
-	fmt.Println("UserCreate.Execute", id, username, password, role)
-
 	userId, err := types.NewUserId(id)
 	if err != nil {
 		return err
@@ -40,6 +37,5 @@ func (this *UserCreate) Execute(id int, username string, password string, role s
 
 	user := domain.NewUser(userId, userUsername, userPassword, userRole)
 
-	fmt.Println("UserCreate.Execute user", user)
 	return this.repository.Create(user)
 }

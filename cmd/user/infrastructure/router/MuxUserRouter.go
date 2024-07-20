@@ -10,7 +10,7 @@ import (
 func MuxUserRouter(r *mux.Router, serviceContainer *infrastructure.ServiceContainer) {
 	userController := controller.NewHttpUserController(serviceContainer)
 
-	r.HandleFunc("/user", userController.Create).Methods("POST")
+	r.HandleFunc("/users", userController.Create).Methods("POST")
 	r.HandleFunc("/users", userController.GetAll).Methods("GET")
 	r.HandleFunc("/users/{id}", userController.GetById).Methods("GET")
 	r.HandleFunc("/users/{id}", userController.Edit).Methods("PUT")

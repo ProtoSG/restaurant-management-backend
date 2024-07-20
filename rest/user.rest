@@ -15,13 +15,12 @@ User-Agent: VRC
 #GET /2
 
 # NOTE: Probado
-#POST 
-#{
-#  #"id" : 1,
-#  "username" : "test",
-#  "password" : "test"
-#  #"role" : "ADMIN"
-#}
+POST 
+{
+  "username" : "test2",
+  "password" : "test2",
+  "role" : "ADMIN"
+}
 
 # NOTE: Probado
 #PUT /2
@@ -33,4 +32,4 @@ User-Agent: VRC
 
 
 # NOTE: Probado
-DELETE /2
+#DELETE /2

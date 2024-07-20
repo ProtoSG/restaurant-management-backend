@@ -8,6 +8,8 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type HttpUserController struct {
@@ -35,6 +37,14 @@ func (c *HttpUserController) Create(w http.ResponseWriter, r *http.Request) {
 		infrastructure.RespondValidationError(w, err)
 		return
 	}
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al generar el hash")
+		return
+	}
+
+	req.Password = string(hash)
 
 	if err := c.serviceContainer.User.Create.Execute(req.Id, req.Username, req.Password, req.Role); err != nil {
 		infrastructure.RespondWithError(w, http.StatusBadRequest, "Error al crear el usuario")
