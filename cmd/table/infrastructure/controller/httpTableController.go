@@ -34,7 +34,7 @@ func (this *HttpTableController) Create(w http.ResponseWriter, r *http.Request) 
 	}
 
 	if err := this.serviceContainer.Table.Create.Execute(table.Id, table.Name, table.CategoryId, table.Status); err != nil {
-		infrastructure.RespondWithError(w, http.StatusBadRequest, "Error al crear la tabla")
+		infrastructure.RespondWithError(w, http.StatusBadRequest, "Error al crear la mesa")
 		return
 	}
 

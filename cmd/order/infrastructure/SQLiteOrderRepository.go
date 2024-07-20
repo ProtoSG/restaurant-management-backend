@@ -121,7 +121,7 @@ func (this SQLiteOrderRepository) Edit(order *domain.Order) error {
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(order.TableId, order.UserId, order.Total, order.CreatedAt, order.UpdatedAt, order.Id)
+	_, err = stmt.Exec(order.TableId.Value, order.UserId.Value, order.Total.Value, order.CreatedAt.Value, order.UpdatedAt.Value, order.Id.Value)
 	if err != nil {
 		return err
 	}
@@ -130,7 +130,7 @@ func (this SQLiteOrderRepository) Edit(order *domain.Order) error {
 }
 
 func (this SQLiteOrderRepository) Delete(orderId *types.OrderId) error {
-	stmt, err := this.db.Prepare("DELETE FROM tables WHERE id = ?")
+	stmt, err := this.db.Prepare("DELETE FROM orders WHERE id = ?")
 	if err != nil {
 		return err
 	}

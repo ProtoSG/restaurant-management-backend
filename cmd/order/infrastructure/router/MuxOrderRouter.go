@@ -12,7 +12,7 @@ func MuxOrderRouter(r *mux.Router, serviceContainer *infrastructure.ServiceConta
 
 	r.HandleFunc("/order", orderController.Create).Methods("POST")
 	r.HandleFunc("/order", orderController.GetAll).Methods("GET")
-	// r.HandleFunc("/order/{id}", orderController.).Methods("POST")
-	// r.HandleFunc("/order/{id}", orderController.Create).Methods("POST")
-	// r.HandleFunc("/order/{id}", orderController.Create).Methods("POST")
+	r.HandleFunc("/order/{id}", orderController.GetById).Methods("GET")
+	r.HandleFunc("/order/{id}", orderController.Edit).Methods("PUT")
+	r.HandleFunc("/order/{id}", orderController.Delete).Methods("DELETE")
 }

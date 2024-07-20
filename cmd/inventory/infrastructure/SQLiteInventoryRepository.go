@@ -18,13 +18,13 @@ func NewSQLiteInventoryRepository(db *sql.DB) *SQLiteInventoryRepository {
 }
 
 func (this SQLiteInventoryRepository) Create(inventory *domain.Inventory) error {
-	stmt, err := this.db.Prepare("INSERT INTO inventory (id, name, item_category_id, quantity, price) VALUES (?, ?, ?, ?, ?)")
+	stmt, err := this.db.Prepare("INSERT INTO inventory (name, item_category_id, quantity, price) VALUES (?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(inventory.Id.Value, inventory.Name.Value, inventory.ItemCategoryId.Value, inventory.Quantity.Value, inventory.Price.Value)
+	_, err = stmt.Exec(inventory.Name.Value, inventory.ItemCategoryId.Value, inventory.Quantity.Value, inventory.Price.Value)
 	if err != nil {
 		return err
 	}

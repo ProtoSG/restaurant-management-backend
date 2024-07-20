@@ -8,25 +8,30 @@ Connection: keep-alive
 Content-Type: application/json; charset=utf-8 
 User-Agent: VRC
 
-GET 
+# NOTE: Probado
+#GET 
 
+# NOTE: Probado
 #GET /1
 
+# NOTE: Probado
 #POST 
 #{
-#  #"id" : 1,
-#  "name" : "test",
-#  "category_id" : 1,
-#  "status" : 1
+#  "name": "Trio Marino (arroz con mariscos y chicharron de pota)",
+#  "item_category_id": 1,
+#  "quantity": 10,
+#  "price": 18
 #}
 
+# NOTE: Probado
 #PUT /2
 #{
-#"username" : "Pedro",
-#  "password" : "asd",
-#  "role" : "ADMIN"
+#  "name": "Trio Marino (arroz con mariscos y chicharron de pota)",
+#  "item_category_id": 1,
+#  "quantity": 10,
+#  "price": 20
 #}
 
-
-#DELETE /1
+# NOTE: Probado
+#DELETE /2
 

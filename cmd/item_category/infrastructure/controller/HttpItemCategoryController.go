@@ -80,7 +80,7 @@ func (this *HttpItemCategoryController) GetById(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	infrastructure.RespondWithSuccess(w, http.StatusOK, itemCategory)
+	infrastructure.RespondWithSuccess(w, http.StatusOK, itemCategory.MapToPrimitive())
 }
 
 func (this *HttpItemCategoryController) Edit(w http.ResponseWriter, r *http.Request) {

@@ -18,7 +18,7 @@ func NewSQLiteTableRepository(db *sql.DB) *SQLiteTableRepository {
 }
 
 func (this SQLiteTableRepository) Create(table *domain.Table) error {
-	stmt, err := this.db.Prepare("INSERT INTO tables (name, table_category_id, status) VALUES (?. ?, ?)")
+	stmt, err := this.db.Prepare("INSERT INTO tables (name, table_category_id, status) VALUES (?, ?, ?)")
 	if err != nil {
 		return err
 	}

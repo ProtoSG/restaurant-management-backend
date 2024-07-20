@@ -8,24 +8,23 @@ Connection: keep-alive
 Content-Type: application/json; charset=utf-8 
 User-Agent: VRC
 
-GET 
+# NOTE: Probado
+#GET 
 
+# NOTE: Probado
 #GET /3
 
+# NOTE: Probado
 #POST 
 #{
-#  #"id" : 1,
-#  "name" : "test",
-#  "category_id" : 1,
-#  "status" : 1
+#  "name": "segundo piso"
 #}
 
-#PUT /2
+# NOTE: Probado
+#PUT /5
 #{
-#"username" : "Pedro",
-#  "password" : "asd",
-#  "role" : "ADMIN"
+#  "name": "segundo pisos"
 #}
 
-
-#DELETE /1
+# NOTE: Probado
+#DELETE /5

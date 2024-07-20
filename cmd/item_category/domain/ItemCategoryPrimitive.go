@@ -16,7 +16,7 @@ func (this ItemCategory) MapToPrimitive() *ItemCategoryPrimitive {
 
 func (this *ItemCategoryPrimitive) Validate() *domain.ValidationFieldError {
 	if this.Name == "" {
-		return &domain.ValidationFieldError{Field: "name", Message: "Name is required"}
+		return &domain.ValidationFieldError{Field: "name", Message: "name is required"}
 	}
 	return nil
 }

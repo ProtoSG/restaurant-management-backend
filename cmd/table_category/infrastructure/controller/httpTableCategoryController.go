@@ -78,7 +78,7 @@ func (this *HttpTableCategoryController) GetById(w http.ResponseWriter, r *http.
 		return
 	}
 
-	infrastructure.RespondWithSuccess(w, http.StatusOK, tableCategory)
+	infrastructure.RespondWithSuccess(w, http.StatusOK, tableCategory.MapToPrimitive())
 }
 
 func (this *HttpTableCategoryController) Edit(w http.ResponseWriter, r *http.Request) {

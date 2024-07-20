@@ -14,8 +14,8 @@ type OrderResponsePrimitive struct {
 	UserId     int                                           `json:"user_id"`
 	User       *domainUser.UserPrimitive                     `json:"user"`
 	OrderItems []*domainOrderItem.OrderItemResponsePrimitive `json:"order"`
-	CreatedAt  time.Time                                     `json:"createdAt"`
-	UpdatedAt  time.Time                                     `json:"updatedAt"`
+	CreatedAt  time.Time                                     `json:"created_at"`
+	UpdatedAt  time.Time                                     `json:"updated_at"`
 }
 
 func (this OrderResponse) MapToPrimitive() *OrderResponsePrimitive {

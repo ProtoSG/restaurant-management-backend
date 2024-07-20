@@ -25,8 +25,9 @@ func (this TablePrimitive) Validate() *domain.ValidationFieldError {
 	if this.CategoryId == 0 {
 		return &domain.ValidationFieldError{Field: "category_id", Message: "Category_id es requerido"}
 	}
-	if this.Status == 0 {
-		return &domain.ValidationFieldError{Field: "status", Message: "Status es requerido"}
-	}
+	// TODO: Revisar si es necesario
+	// if this.Status == 0 {
+	// 	return &domain.ValidationFieldError{Field: "status", Message: "Status es requerido"}
+	// }
 	return nil
 }
