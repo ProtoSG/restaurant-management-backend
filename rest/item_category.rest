@@ -8,17 +8,17 @@ Connection: keep-alive
 Content-Type: application/json; charset=utf-8 
 User-Agent: VRC
 
-# NOTE: Probado
+ #NOTE: Probado
 #GET 
 
 # NOTE: Probado
 #GET /1
 
 # NOTE: Probado
-#POST 
-#{
-#  "name" : "duo"
-#}
+POST 
+{
+  "name" : "duo"
+}
 
 # NOTE: Probado
 #PUT /3

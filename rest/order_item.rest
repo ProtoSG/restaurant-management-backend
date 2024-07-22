@@ -10,7 +10,7 @@ User-Agent: VRC
 
 
 # NOTE: Probado
-GET 
+#GET 
 
 # NOTE: Probado
 #GET /1

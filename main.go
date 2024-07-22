@@ -12,6 +12,7 @@ import (
 	tableCategoryRouter "restaurant-management-backend/cmd/table_category/infrastructure/router"
 	userRouter "restaurant-management-backend/cmd/user/infrastructure/router"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -29,5 +30,5 @@ func main() {
 	orderItemRouter.MuxOrderItemRouter(r, serviceContainer)
 
 	log.Println("Server running on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	log.Fatal(http.ListenAndServe(":8080", handlers.CORS()(r)))
 }
