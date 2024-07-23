@@ -15,13 +15,13 @@ User-Agent: VRC
 #GET /1
 
 # NOTE: Probado
-#POST 
-#{
-#  "name": "Trio Marino (arroz con mariscos y chicharron de pota)",
-#  "item_category_id": 1,
-#  "quantity": 10,
-#  "price": 18
-#}
+POST 
+{
+  "name": "Trio Marino (arroz con mariscos y chicharron de pota)",
+  "item_category_id": 1,
+  "quantity": 10,
+  "price": 18
+}
 
 # NOTE: Probado
 #PUT /2
