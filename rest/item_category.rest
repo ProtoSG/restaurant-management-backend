@@ -15,10 +15,10 @@ User-Agent: VRC
 #GET /1
 
 # NOTE: Probado
-#POST 
-#{
-#  "name" : "duo"
-#}
+POST 
+{
+  "name" : "bebidas"
+}
 
 # NOTE: Probado
 #PUT /3

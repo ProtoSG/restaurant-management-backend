@@ -11,13 +11,14 @@ User-Agent: VRC
 # NOTE: Probado
 #GET 
 
+
 # NOTE: Probado
 #GET /3
 
 # NOTE: Probado
 #POST 
 #{
-#  "name": "segundo piso"
+#  "name": "Llevar"
 #}
 
 # NOTE: Probado
@@ -27,4 +28,4 @@ User-Agent: VRC
 #}
 
 # NOTE: Probado
-#DELETE /5
+#DELETE /4
