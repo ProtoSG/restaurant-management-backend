@@ -19,6 +19,7 @@ type OrderResponse struct {
 	Total      *types.OrderTotal                    `json:"total"`
 	CreatedAt  *types.OrderCreatedAt                `json:"created_at"`
 	UpdatedAt  *types.OrderUpdatedAt                `json:"updated_at"`
+	Completed  *types.OrderCompleted                `json:"completed"`
 }
 
 func NewOrderResponse(
@@ -31,6 +32,7 @@ func NewOrderResponse(
 	total *types.OrderTotal,
 	createdAt *types.OrderCreatedAt,
 	updatedAt *types.OrderUpdatedAt,
+	completed *types.OrderCompleted,
 ) *OrderResponse {
 	return &OrderResponse{
 		Id:         id,
@@ -42,5 +44,6 @@ func NewOrderResponse(
 		Total:      total,
 		CreatedAt:  createdAt,
 		UpdatedAt:  updatedAt,
+		Completed:  completed,
 	}
 }

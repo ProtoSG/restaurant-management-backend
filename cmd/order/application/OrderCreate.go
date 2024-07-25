@@ -19,7 +19,7 @@ func NewOrderCreate(repository repository.OrderRepository) *OrderCreate {
 	}
 }
 
-func (this *OrderCreate) Execute(id int, tableId int, userId int, total float32, createdAt time.Time, updatedAt time.Time) error {
+func (this *OrderCreate) Execute(id int, tableId int, userId int, total float32, createdAt time.Time, updatedAt time.Time, completed int) error {
 	orderId, err := types.NewOrderId(id)
 	if err != nil {
 		return err
@@ -50,6 +50,11 @@ func (this *OrderCreate) Execute(id int, tableId int, userId int, total float32,
 		return err
 	}
 
-	order := domain.NewOrder(orderId, orderTableId, orderUserId, orderTotal, orderCreatedAt, orderUpdatedAt)
+	orderCompleted, err := types.NewOrderCompleted(completed)
+	if err != nil {
+		return err
+	}
+
+	order := domain.NewOrder(orderId, orderTableId, orderUserId, orderTotal, orderCreatedAt, orderUpdatedAt, orderCompleted)
 	return this.repository.Create(order)
 }

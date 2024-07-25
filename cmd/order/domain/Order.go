@@ -13,9 +13,18 @@ type Order struct {
 	Total     *types.OrderTotal     `json:"total"`
 	CreatedAt *types.OrderCreatedAt `json:"createdAt"`
 	UpdatedAt *types.OrderUpdatedAt `json:"updatedAt"`
+	Completed *types.OrderCompleted `json:"completed"`
 }
 
-func NewOrder(id *types.OrderId, tableId *typesTable.TableId, userId *typesUser.UserId, total *types.OrderTotal, createdAt *types.OrderCreatedAt, updatedAt *types.OrderUpdatedAt) *Order {
+func NewOrder(
+	id *types.OrderId,
+	tableId *typesTable.TableId,
+	userId *typesUser.UserId,
+	total *types.OrderTotal,
+	createdAt *types.OrderCreatedAt,
+	updatedAt *types.OrderUpdatedAt,
+	completed *types.OrderCompleted,
+) *Order {
 	return &Order{
 		Id:        id,
 		TableId:   tableId,
@@ -23,5 +32,6 @@ func NewOrder(id *types.OrderId, tableId *typesTable.TableId, userId *typesUser.
 		Total:     total,
 		CreatedAt: createdAt,
 		UpdatedAt: updatedAt,
+		Completed: completed,
 	}
 }

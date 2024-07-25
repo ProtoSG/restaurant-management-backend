@@ -33,7 +33,7 @@ func (this *HttpInventoryController) Create(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	if err := this.serviceContainer.Inventory.Create.Execute(inventory.Id, inventory.Name, inventory.ItemCategoryId, inventory.Quantity, inventory.Price); err != nil {
+	if err := this.serviceContainer.Inventory.Create.Execute(inventory.Id, inventory.Name, inventory.ItemCategoryId, inventory.Quantity, inventory.Price, inventory.Image); err != nil {
 		infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al crear el inventario")
 		return
 	}
@@ -46,7 +46,7 @@ func (this *HttpInventoryController) GetAll(w http.ResponseWriter, r *http.Reque
 
 	inventory, err := this.serviceContainer.Inventory.GetAll.Execute()
 	if err != nil {
-		infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al obtener el inventario")
+		infrastructure.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -103,7 +103,7 @@ func (this *HttpInventoryController) Edit(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	if err != this.serviceContainer.Inventory.Edit.Execute(id, inventory.Name, inventory.ItemCategoryId, inventory.Quantity, inventory.Price) {
+	if err != this.serviceContainer.Inventory.Edit.Execute(id, inventory.Name, inventory.ItemCategoryId, inventory.Quantity, inventory.Price, inventory.Image) {
 		if _, ok := err.(*domain.InventoryNotFound); ok {
 			infrastructure.RespondWithError(w, http.StatusNotFound, err.Error())
 		} else {

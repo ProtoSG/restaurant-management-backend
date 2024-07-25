@@ -18,13 +18,13 @@ func NewSQLiteInventoryRepository(db *sql.DB) *SQLiteInventoryRepository {
 }
 
 func (this SQLiteInventoryRepository) Create(inventory *domain.Inventory) error {
-	stmt, err := this.db.Prepare("INSERT INTO inventory (name, item_category_id, quantity, price) VALUES (?, ?, ?, ?)")
+	stmt, err := this.db.Prepare("INSERT INTO inventory (name, item_category_id, quantity, price, image) VALUES (?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(inventory.Name.Value, inventory.ItemCategoryId.Value, inventory.Quantity.Value, inventory.Price.Value)
+	_, err = stmt.Exec(inventory.Name.Value, inventory.ItemCategoryId.Value, inventory.Quantity.Value, inventory.Price.Value, inventory.Image.Value)
 	if err != nil {
 		return err
 	}
@@ -34,7 +34,7 @@ func (this SQLiteInventoryRepository) Create(inventory *domain.Inventory) error 
 
 func (this SQLiteInventoryRepository) GetAll() ([]*domain.InventoryResponse, error) {
 	stmt, err := this.db.Prepare(`
-    SELECT i.id, i.name, i.item_category_id AS category_name, i.quantity, i.price, ic.name AS category_name
+    SELECT i.id, i.name, i.item_category_id AS category_name, i.quantity, i.price, i.image, ic.name AS category_name
     FROM inventory i 
     JOIN item_category ic ON i.item_category_id = ic.id;
   `)
@@ -53,7 +53,7 @@ func (this SQLiteInventoryRepository) GetAll() ([]*domain.InventoryResponse, err
 	for rows.Next() {
 		var inv domain.InventoryPrimitive
 		var itemCategory domainItemCategory.ItemCategoryPrimitive
-		if err := rows.Scan(&inv.Id, &inv.Name, &itemCategory.Id, &inv.Quantity, &inv.Price, &itemCategory.Name); err != nil {
+		if err := rows.Scan(&inv.Id, &inv.Name, &itemCategory.Id, &inv.Quantity, &inv.Price, &inv.Image, &itemCategory.Name); err != nil {
 			return nil, err
 		}
 
@@ -61,12 +61,13 @@ func (this SQLiteInventoryRepository) GetAll() ([]*domain.InventoryResponse, err
 		invName, _ := types.NewInventoryName(inv.Name)
 		invQuantity, _ := types.NewInventoryQuantity(inv.Quantity)
 		invPrice, _ := types.NewInventoryPrice(inv.Price)
+		invImage, _ := types.NewInventoryImage(inv.Image)
 
 		itemCategoryId, _ := typesItemCategory.NewItemCategoryId(itemCategory.Id)
 		itemCategoryName, _ := typesItemCategory.NewItemCategoryName(itemCategory.Name)
 
 		newItemCategory := domainItemCategory.NewItemCategory(itemCategoryId, itemCategoryName)
-		newInventory := domain.NewInventoryResponse(invId, invName, newItemCategory, invQuantity, invPrice)
+		newInventory := domain.NewInventoryResponse(invId, invName, newItemCategory, invQuantity, invPrice, invImage)
 
 		inventory = append(inventory, newInventory)
 	}
@@ -79,7 +80,7 @@ func (this SQLiteInventoryRepository) GetAll() ([]*domain.InventoryResponse, err
 
 func (this SQLiteInventoryRepository) GetById(id *types.InventoryId) (*domain.InventoryResponse, error) {
 	stmt, err := this.db.Prepare(`
-    SELECT i.id, i.name, i.item_category_id AS category_name, i.quantity, i.price, ic.name AS category_name
+    SELECT i.id, i.name, i.item_category_id AS category_name, i.quantity, i.price, i.image ic.name AS category_name
     FROM inventory i 
     JOIN item_category ic ON i.item_category_id = ic.id
     WHERE i.id = ?;
@@ -94,7 +95,7 @@ func (this SQLiteInventoryRepository) GetById(id *types.InventoryId) (*domain.In
 	var inv domain.InventoryPrimitive
 	var itemCategory domainItemCategory.ItemCategoryPrimitive
 
-	err = row.Scan(&inv.Id, &inv.Name, &itemCategory.Id, &inv.Quantity, &inv.Price, &itemCategory.Name)
+	err = row.Scan(&inv.Id, &inv.Name, &itemCategory.Id, &inv.Quantity, &inv.Price, &inv.Image, &itemCategory.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -103,24 +104,25 @@ func (this SQLiteInventoryRepository) GetById(id *types.InventoryId) (*domain.In
 	invName, _ := types.NewInventoryName(inv.Name)
 	invQuantity, _ := types.NewInventoryQuantity(inv.Quantity)
 	invPrice, _ := types.NewInventoryPrice(inv.Price)
+	invImage, _ := types.NewInventoryImage(inv.Image)
 
 	itemCategoryId, _ := typesItemCategory.NewItemCategoryId(itemCategory.Id)
 	itemCategoryName, _ := typesItemCategory.NewItemCategoryName(itemCategory.Name)
 
 	newItemCategory := domainItemCategory.NewItemCategory(itemCategoryId, itemCategoryName)
-	newInventory := domain.NewInventoryResponse(invId, invName, newItemCategory, invQuantity, invPrice)
+	newInventory := domain.NewInventoryResponse(invId, invName, newItemCategory, invQuantity, invPrice, invImage)
 
 	return newInventory, nil
 }
 
 func (this SQLiteInventoryRepository) Edit(inventory *domain.Inventory) error {
-	stmt, err := this.db.Prepare("UPDATE inventory SET name = ?, item_category_id = ?, quantity = ?, price = ? WHERE id = ?")
+	stmt, err := this.db.Prepare("UPDATE inventory SET name = ?, item_category_id = ?, quantity = ?, price = ?, image = ? WHERE id = ?")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(inventory.Name.Value, inventory.ItemCategoryId.Value, inventory.Quantity.Value, inventory.Price.Value, inventory.Id.Value)
+	_, err = stmt.Exec(inventory.Name.Value, inventory.ItemCategoryId.Value, inventory.Quantity.Value, inventory.Price.Value, inventory.Image.Value, inventory.Id.Value)
 	if err != nil {
 		return err
 	}

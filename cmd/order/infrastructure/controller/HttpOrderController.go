@@ -43,6 +43,7 @@ func (this *HttpOrderController) Create(w http.ResponseWriter, r *http.Request) 
 		order.Total,
 		order.CreatedAt,
 		order.UpdatedAt,
+		order.Completed,
 	); err != nil {
 		infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al crear la orden")
 		return
@@ -204,6 +205,7 @@ func (this *HttpOrderController) Edit(w http.ResponseWriter, r *http.Request) {
 		order.Total,
 		order.CreatedAt,
 		order.UpdatedAt,
+		order.Completed,
 	); err != nil {
 		infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al editar la orden")
 		return

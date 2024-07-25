@@ -8,6 +8,7 @@ type InventoryPrimitive struct {
 	ItemCategoryId int     `json:"item_category_id"`
 	Quantity       int     `json:"quantity"`
 	Price          float32 `json:"price"`
+	Image          string  `json:"image"`
 }
 
 func (this Inventory) MapToPrimitive() *InventoryPrimitive {
@@ -17,6 +18,7 @@ func (this Inventory) MapToPrimitive() *InventoryPrimitive {
 		ItemCategoryId: this.ItemCategoryId.Value,
 		Quantity:       this.Quantity.Value,
 		Price:          this.Price.Value,
+		Image:          this.Image.Value,
 	}
 }
 

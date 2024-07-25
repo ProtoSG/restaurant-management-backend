@@ -19,13 +19,13 @@ func NewSQLiteOrderItemRepository(db *sql.DB) *SQLiteOrderItemRepository {
 }
 
 func (this SQLiteOrderItemRepository) Create(orderItem *domain.OrderItem) error {
-	stmt, err := this.db.Prepare("INSERT INTO order_item (order_id, item_id, quantity, sub_total) VALUES (?, ?, ?, ?)")
+	stmt, err := this.db.Prepare("INSERT INTO order_item (order_id, item_id, quantity, sub_total, description, takeaway) VALUES (?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(orderItem.OrderId.Value, orderItem.ItemId.Value, orderItem.Quantity.Value, orderItem.SubTotal.Value)
+	_, err = stmt.Exec(orderItem.OrderId.Value, orderItem.ItemId.Value, orderItem.Quantity.Value, orderItem.SubTotal.Value, orderItem.Description.Value, orderItem.Takeaway.Value)
 	if err != nil {
 		return err
 	}
@@ -52,7 +52,7 @@ func (this SQLiteOrderItemRepository) GetAll() ([]*domain.OrderItemResponse, err
 		var order_item domain.OrderItemPrimitive
 		var item *domainInventory.InventoryResponse
 
-		if err := rows.Scan(&order_item.Id, &order_item.OrderId, &order_item.ItemId, &order_item.Quantity, &order_item.SubTotal); err != nil {
+		if err := rows.Scan(&order_item.Id, &order_item.OrderId, &order_item.ItemId, &order_item.Quantity, &order_item.SubTotal, &order_item.Description, &order_item.Takeaway); err != nil {
 			return nil, err
 		}
 
@@ -61,8 +61,10 @@ func (this SQLiteOrderItemRepository) GetAll() ([]*domain.OrderItemResponse, err
 		orderItemInventoryId, _ := typesInventory.NewInventoryId(order_item.ItemId)
 		orderItemQuantity, _ := types.NewOrderQuantity(order_item.Quantity)
 		orderItemSubTotal, _ := types.NewOrderSubTotal(order_item.SubTotal)
+		orderItemDescription, _ := types.NewOrderItemDescription(order_item.Description)
+		orderItemTakeaway, _ := types.NewOrderItemTakeaway(order_item.Takeaway)
 
-		newOrderItem := domain.NewOrderItemResponse(orderItemId, orderItemOrderId, orderItemInventoryId, item, orderItemQuantity, orderItemSubTotal)
+		newOrderItem := domain.NewOrderItemResponse(orderItemId, orderItemOrderId, orderItemInventoryId, item, orderItemQuantity, orderItemSubTotal, orderItemDescription, orderItemTakeaway)
 
 		orders_items = append(orders_items, newOrderItem)
 	}
@@ -86,7 +88,7 @@ func (this SQLiteOrderItemRepository) GetById(orderItemId *types.OrderItemId) (*
 	var order_item domain.OrderItemPrimitive
 	var item *domainInventory.InventoryResponse
 
-	if err = row.Scan(&order_item.Id, &order_item.OrderId, &order_item.ItemId, &order_item.Quantity, &order_item.SubTotal); err != nil {
+	if err = row.Scan(&order_item.Id, &order_item.OrderId, &order_item.ItemId, &order_item.Quantity, &order_item.SubTotal, &order_item.Description, &order_item.Takeaway); err != nil {
 		return nil, err
 	}
 
@@ -94,20 +96,22 @@ func (this SQLiteOrderItemRepository) GetById(orderItemId *types.OrderItemId) (*
 	orderItemInventoryId, _ := typesInventory.NewInventoryId(order_item.ItemId)
 	orderItemQuantity, _ := types.NewOrderQuantity(order_item.Quantity)
 	orderItemSubTotal, _ := types.NewOrderSubTotal(order_item.SubTotal)
+	orderItemDescription, _ := types.NewOrderItemDescription(order_item.Description)
+	orderItemTakeaway, _ := types.NewOrderItemTakeaway(order_item.Takeaway)
 
-	newOrderItem := domain.NewOrderItemResponse(orderItemId, orderItemOrderId, orderItemInventoryId, item, orderItemQuantity, orderItemSubTotal)
+	newOrderItem := domain.NewOrderItemResponse(orderItemId, orderItemOrderId, orderItemInventoryId, item, orderItemQuantity, orderItemSubTotal, orderItemDescription, orderItemTakeaway)
 
 	return newOrderItem, nil
 }
 
 func (this SQLiteOrderItemRepository) Edit(orderItem *domain.OrderItem) error {
-	stmt, err := this.db.Prepare("UPDATE order_item SET order_id = ?, item_id = ?, quantity = ?, sub_total = ? WHERE id = ?")
+	stmt, err := this.db.Prepare("UPDATE order_item SET order_id = ?, item_id = ?, quantity = ?, sub_total = ?, description = ?, takeaway = ? WHERE id = ?")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(orderItem.OrderId.Value, orderItem.ItemId.Value, orderItem.Quantity.Value, orderItem.SubTotal.Value, orderItem.Id.Value)
+	_, err = stmt.Exec(orderItem.OrderId.Value, orderItem.ItemId.Value, orderItem.Quantity.Value, orderItem.SubTotal.Value, orderItem.Description.Value, orderItem.Takeaway.Value, orderItem.Id.Value)
 	if err != nil {
 		return err
 	}
@@ -148,7 +152,7 @@ func (this SQLiteOrderItemRepository) GetByOrder(orderId *typesOrder.OrderId) ([
 		var order_item domain.OrderItemPrimitive
 		var item *domainInventory.InventoryResponse
 
-		if err := rows.Scan(&order_item.Id, &order_item.OrderId, &order_item.ItemId, &order_item.Quantity, &order_item.SubTotal); err != nil {
+		if err := rows.Scan(&order_item.Id, &order_item.OrderId, &order_item.ItemId, &order_item.Quantity, &order_item.SubTotal, &order_item.Description, &order_item.Takeaway); err != nil {
 			return nil, err
 		}
 
@@ -157,8 +161,10 @@ func (this SQLiteOrderItemRepository) GetByOrder(orderId *typesOrder.OrderId) ([
 		orderItemInventoryId, _ := typesInventory.NewInventoryId(order_item.ItemId)
 		orderItemQuantity, _ := types.NewOrderQuantity(order_item.Quantity)
 		orderItemSubTotal, _ := types.NewOrderSubTotal(order_item.SubTotal)
+		orderItemDescription, _ := types.NewOrderItemDescription(order_item.Description)
+		orderItemTakeaway, _ := types.NewOrderItemTakeaway(order_item.Takeaway)
 
-		newOrderItem := domain.NewOrderItemResponse(orderItemId, orderItemOrderId, orderItemInventoryId, item, orderItemQuantity, orderItemSubTotal)
+		newOrderItem := domain.NewOrderItemResponse(orderItemId, orderItemOrderId, orderItemInventoryId, item, orderItemQuantity, orderItemSubTotal, orderItemDescription, orderItemTakeaway)
 
 		orders_items = append(orders_items, newOrderItem)
 	}

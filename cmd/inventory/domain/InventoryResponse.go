@@ -11,14 +11,16 @@ type InventoryResponse struct {
 	Category *domain.ItemCategory     `json:"category"`
 	Quantity *types.InventoryQuantity `json:"quantity"`
 	Price    *types.InventoryPrice    `json:"price"`
+	Image    *types.InventoryImage    `json:"image"`
 }
 
-func NewInventoryResponse(id *types.InventoryId, name *types.InventoryName, category *domain.ItemCategory, quantity *types.InventoryQuantity, price *types.InventoryPrice) *InventoryResponse {
+func NewInventoryResponse(id *types.InventoryId, name *types.InventoryName, category *domain.ItemCategory, quantity *types.InventoryQuantity, price *types.InventoryPrice, image *types.InventoryImage) *InventoryResponse {
 	return &InventoryResponse{
 		Id:       id,
 		Name:     name,
 		Category: category,
 		Quantity: quantity,
 		Price:    price,
+		Image:    image,
 	}
 }

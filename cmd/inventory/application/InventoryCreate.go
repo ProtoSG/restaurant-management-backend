@@ -16,7 +16,7 @@ func NewInventoryCreate(repository repository.InventoryRepository) *InventoryCre
 	}
 }
 
-func (this InventoryCreate) Execute(id int, name string, item_category_id int, quantity int, price float32) error {
+func (this InventoryCreate) Execute(id int, name string, item_category_id int, quantity int, price float32, image string) error {
 	inventoryId, err := types.NewInventoryId(id)
 	if err != nil {
 		return err
@@ -42,6 +42,11 @@ func (this InventoryCreate) Execute(id int, name string, item_category_id int, q
 		return err
 	}
 
-	inventory := domain.NewInventory(inventoryId, inventoryName, inventoryItemCategoryId, inventoryQuantity, inventoryPrice)
+	inventoryImage, err := types.NewInventoryImage(image)
+	if err != nil {
+		return err
+	}
+
+	inventory := domain.NewInventory(inventoryId, inventoryName, inventoryItemCategoryId, inventoryQuantity, inventoryPrice, inventoryImage)
 	return this.repository.Create(inventory)
 }

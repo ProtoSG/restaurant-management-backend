@@ -7,11 +7,13 @@ import (
 )
 
 type OrderItem struct {
-	Id       *types.OrderItemId          `json:"id"`
-	OrderId  *typesOrder.OrderId         `json:"order_id"`
-	ItemId   *typesInventory.InventoryId `json:"item_id"`
-	Quantity *types.OrderItemQuantity    `json:"quantity"`
-	SubTotal *types.OrderItemSubTotal    `json:"sub_total"`
+	Id          *types.OrderItemId          `json:"id"`
+	OrderId     *typesOrder.OrderId         `json:"order_id"`
+	ItemId      *typesInventory.InventoryId `json:"item_id"`
+	Quantity    *types.OrderItemQuantity    `json:"quantity"`
+	SubTotal    *types.OrderItemSubTotal    `json:"sub_total"`
+	Description *types.OrderItemDescription `json:"description"`
+	Takeaway    *types.OrderItemTakeaway    `json:"takeaway"`
 }
 
 func NewOrderItem(
@@ -20,12 +22,16 @@ func NewOrderItem(
 	itemId *typesInventory.InventoryId,
 	quantity *types.OrderItemQuantity,
 	subTotal *types.OrderItemSubTotal,
+	description *types.OrderItemDescription,
+	takeaway *types.OrderItemTakeaway,
 ) *OrderItem {
 	return &OrderItem{
-		Id:       id,
-		OrderId:  orderId,
-		ItemId:   itemId,
-		Quantity: quantity,
-		SubTotal: subTotal,
+		Id:          id,
+		OrderId:     orderId,
+		ItemId:      itemId,
+		Quantity:    quantity,
+		SubTotal:    subTotal,
+		Description: description,
+		Takeaway:    takeaway,
 	}
 }

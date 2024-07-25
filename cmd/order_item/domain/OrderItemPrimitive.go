@@ -3,20 +3,24 @@ package domain
 import "restaurant-management-backend/cmd/shared/domain"
 
 type OrderItemPrimitive struct {
-	Id       int     `json:"id"`
-	OrderId  int     `json:"order_id"`
-	ItemId   int     `json:"item_id"`
-	Quantity int     `json:"quantity"`
-	SubTotal float32 `json:"sub_total"`
+	Id          int     `json:"id"`
+	OrderId     int     `json:"order_id"`
+	ItemId      int     `json:"item_id"`
+	Quantity    int     `json:"quantity"`
+	SubTotal    float32 `json:"sub_total"`
+	Description string  `json:"description"`
+	Takeaway    int     `json:"taken"`
 }
 
 func (this OrderItem) MapToPrimitive() *OrderItemPrimitive {
 	return &OrderItemPrimitive{
-		Id:       this.Id.Value,
-		OrderId:  this.OrderId.Value,
-		ItemId:   this.ItemId.Value,
-		Quantity: this.Quantity.Value,
-		SubTotal: this.SubTotal.Value,
+		Id:          this.Id.Value,
+		OrderId:     this.OrderId.Value,
+		ItemId:      this.ItemId.Value,
+		Quantity:    this.Quantity.Value,
+		SubTotal:    this.SubTotal.Value,
+		Description: this.Description.Value,
+		Takeaway:    this.Takeaway.Value,
 	}
 }
 

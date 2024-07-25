@@ -24,13 +24,13 @@ func NewSQLiteOrderRepository(db *sql.DB) *SQLiteOrderRepository {
 }
 
 func (this SQLiteOrderRepository) Create(order *domain.Order) error {
-	stmt, err := this.db.Prepare("INSERT INTO orders (table_id, user_id, total, created_at, updated_at) VALUES (?, ?, ?, ?, ?)")
+	stmt, err := this.db.Prepare("INSERT INTO orders (table_id, user_id, total, created_at, updated_at, completed) VALUES (?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(order.TableId.Value, order.UserId.Value, order.Total.Value, order.CreatedAt.Value, order.UpdatedAt.Value)
+	_, err = stmt.Exec(order.TableId.Value, order.UserId.Value, order.Total.Value, order.CreatedAt.Value, order.UpdatedAt.Value, order.Completed.Value)
 	if err != nil {
 		return err
 	}
@@ -61,7 +61,7 @@ func (this SQLiteOrderRepository) GetAll() ([]*domain.OrderResponse, error) {
 		var user *domainUser.User
 		var orderItems []*domainOrderItem.OrderItemResponse
 
-		if err := rows.Scan(&order.Id, &order.TableId, &order.UserId, &order.Total, &order.CreatedAt, &order.UpdatedAt); err != nil {
+		if err := rows.Scan(&order.Id, &order.TableId, &order.UserId, &order.Total, &order.CreatedAt, &order.UpdatedAt, &order.Completed); err != nil {
 			return nil, err
 		}
 
@@ -71,8 +71,9 @@ func (this SQLiteOrderRepository) GetAll() ([]*domain.OrderResponse, error) {
 		orderTotal, _ := types.NewOrderTotal(order.Total)
 		orderCreatedAt, _ := types.NewOrderCreatedAt(order.CreatedAt)
 		orderUpdatedAt, _ := types.NewOrderUpdatedAt(order.UpdatedAt)
+		orderCompleted, _ := types.NewOrderCompleted(order.Completed)
 
-		newOrder := domain.NewOrderResponse(orderId, orderTableId, table, orderUserId, user, orderItems, orderTotal, orderCreatedAt, orderUpdatedAt)
+		newOrder := domain.NewOrderResponse(orderId, orderTableId, table, orderUserId, user, orderItems, orderTotal, orderCreatedAt, orderUpdatedAt, orderCompleted)
 
 		orders = append(orders, newOrder)
 	}
@@ -98,7 +99,7 @@ func (this SQLiteOrderRepository) GetById(orderId *types.OrderId) (*domain.Order
 	var table *domainTable.TableResponse
 	var orderItems []*domainOrderItem.OrderItemResponse
 
-	err = row.Scan(&order.Id, &order.TableId, &order.UserId, &order.Total, &order.CreatedAt, &order.UpdatedAt)
+	err = row.Scan(&order.Id, &order.TableId, &order.UserId, &order.Total, &order.CreatedAt, &order.UpdatedAt, &order.Completed)
 	if err != nil {
 		return nil, err
 	}
@@ -108,20 +109,21 @@ func (this SQLiteOrderRepository) GetById(orderId *types.OrderId) (*domain.Order
 	orderTotal, _ := types.NewOrderTotal(order.Total)
 	orderCreatedAt, _ := types.NewOrderCreatedAt(order.CreatedAt)
 	orderUpdatedAt, _ := types.NewOrderUpdatedAt(order.UpdatedAt)
+	orderCompleted, _ := types.NewOrderCompleted(order.Completed)
 
-	newOrder := domain.NewOrderResponse(orderId, orderTableId, table, orderUserId, user, orderItems, orderTotal, orderCreatedAt, orderUpdatedAt)
+	newOrder := domain.NewOrderResponse(orderId, orderTableId, table, orderUserId, user, orderItems, orderTotal, orderCreatedAt, orderUpdatedAt, orderCompleted)
 
 	return newOrder, nil
 }
 
 func (this SQLiteOrderRepository) Edit(order *domain.Order) error {
-	stmt, err := this.db.Prepare("UPDATE orders SET table_id = ?, user_id = ?, total = ?, created_at = ?, updated_at = ? WHERE id = ?")
+	stmt, err := this.db.Prepare("UPDATE orders SET table_id = ?, user_id = ?, total = ?, created_at = ?, updated_at = ?, completed = ? WHERE id = ?")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(order.TableId.Value, order.UserId.Value, order.Total.Value, order.CreatedAt.Value, order.UpdatedAt.Value, order.Id.Value)
+	_, err = stmt.Exec(order.TableId.Value, order.UserId.Value, order.Total.Value, order.CreatedAt.Value, order.UpdatedAt.Value, order.Completed.Value, order.Id.Value)
 	if err != nil {
 		return err
 	}

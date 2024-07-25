@@ -16,6 +16,7 @@ type OrderResponsePrimitive struct {
 	OrderItems []*domainOrderItem.OrderItemResponsePrimitive `json:"order"`
 	CreatedAt  time.Time                                     `json:"created_at"`
 	UpdatedAt  time.Time                                     `json:"updated_at"`
+	Completed  int                                           `json:"completed"`
 }
 
 func (this OrderResponse) MapToPrimitive() *OrderResponsePrimitive {
@@ -28,6 +29,7 @@ func (this OrderResponse) MapToPrimitive() *OrderResponsePrimitive {
 		OrderItems: mapOrderItemsToPrimitive(this.OrderItems),
 		CreatedAt:  this.CreatedAt.Value,
 		UpdatedAt:  this.UpdatedAt.Value,
+		Completed:  this.Completed.Value,
 	}
 }
 

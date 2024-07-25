@@ -12,6 +12,7 @@ type OrderPrimitive struct {
 	Total     float32   `json:"total"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+	Completed int       `json:"completed"`
 }
 
 func (this Order) MapToPrimitive() *OrderPrimitive {
@@ -22,6 +23,7 @@ func (this Order) MapToPrimitive() *OrderPrimitive {
 		Total:     this.Total.Value,
 		CreatedAt: this.CreatedAt.Value,
 		UpdatedAt: this.UpdatedAt.Value,
+		Completed: this.Completed.Value,
 	}
 }
 

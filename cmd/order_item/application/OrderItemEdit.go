@@ -16,7 +16,7 @@ func NewOrderItemEdit(repository repository.OrderItemRepository) *OrderItemEdit 
 	return &OrderItemEdit{repository: repository}
 }
 
-func (this OrderItemEdit) Execute(id int, orderId int, itemId int, quantity int, subTotal float32) error {
+func (this OrderItemEdit) Execute(id int, orderId int, itemId int, quantity int, subTotal float32, description string, takeaway int) error {
 	orderItemId, err := types.NewOrderItemId(id)
 	if err != nil {
 		return err
@@ -46,7 +46,17 @@ func (this OrderItemEdit) Execute(id int, orderId int, itemId int, quantity int,
 		return err
 	}
 
-	orderItem := domain.NewOrderItem(orderItemId, orderItemOrderId, orderItemInventoryId, orderItemQuantity, orderItemSubTotal)
+	orderItemDescription, err := types.NewOrderItemDescription(description)
+	if err != nil {
+		return err
+	}
+
+	orderItemTakeaway, err := types.NewOrderItemTakeaway(takeaway)
+	if err != nil {
+		return err
+	}
+
+	orderItem := domain.NewOrderItem(orderItemId, orderItemOrderId, orderItemInventoryId, orderItemQuantity, orderItemSubTotal, orderItemDescription, orderItemTakeaway)
 
 	return this.repository.Edit(orderItem)
 }

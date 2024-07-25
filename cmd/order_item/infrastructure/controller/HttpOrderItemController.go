@@ -40,6 +40,8 @@ func (this HttpOrderItemController) Create(w http.ResponseWriter, r *http.Reques
 		order_item.ItemId,
 		order_item.Quantity,
 		order_item.SubTotal,
+		order_item.Description,
+		order_item.Takeaway,
 	); err != nil {
 		infrastructure.RespondWithError(w, http.StatusInternalServerError, "Error al crear el item de la orden")
 		return
@@ -139,6 +141,8 @@ func (this HttpOrderItemController) Edit(w http.ResponseWriter, r *http.Request)
 		order_item.ItemId,
 		order_item.Quantity,
 		order_item.SubTotal,
+		order_item.Description,
+		order_item.Takeaway,
 	); err != nil {
 		if _, ok := err.(*domain.OrderNotFound); ok {
 			infrastructure.RespondWithError(w, http.StatusNotFound, err.Error())
